@@ -14,7 +14,7 @@ CREATE TABLE usuario (
     tokenAcceso varchar(4) NOT NULL,
     idEstatus varchar(1) NOT NULL,
     tiempoValidacion DATETIME,
-    password varchar(100) NOT NULL,
+    password varchar(64) NOT NULL,
     PRIMARY KEY (idUsuario)
 );
 

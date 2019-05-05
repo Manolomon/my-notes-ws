@@ -6,13 +6,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="Usuario">
     
     <select id="buscarNumero" resultType="int" parameterType="string">
-        SELECT TOP 1 COUNT(idUsuario) FROM blocnotas.dbo.usuario WHERE telefono = #{telefono};
+        SELECT COUNT(idUsuario) FROM usuario WHERE telefono = #{telefono};
     </select>
     
     <insert id="registrar" parameterType="beans.Usuario">
-        INSERT INTO blocnotas.dbo.usuario
-        (nombre,telefono,tiempoRegistro,tokenAcceso,idEstatus)
-        VALUES (#{nombre},#{telefono},GETDATE() ,#{tokenAcceso},0);
+        INSERT INTO usuario
+        (nombre,telefono,tiempoRegistro,tokenAcceso,idEstatus, password)
+        VALUES (#{nombre},#{telefono}, NOW() ,#{tokenAcceso}, "0", #{password});
     </insert>
     
     <select id="validarRegistro" parameterType="map" resultType="beans.Usuario">

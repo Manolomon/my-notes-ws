@@ -13,7 +13,7 @@ import org.apache.ibatis.session.SqlSession;
 
 /**
  *
- * @author manolo
+ * @author Manolomon
  */
 public class NotaDAO {
     public static List<Nota> getUserNotes(Integer idUsuario) {
@@ -31,4 +31,63 @@ public class NotaDAO {
         }
         return list;
     }
+    
+    public static int deleteNote(Integer idNota) {
+        int filas = 0;
+        if (idNota != null) {    
+            SqlSession conn = null;
+            try {
+                conn = MyBatisUtils.getSession();
+                filas = conn.delete("Nota.delete", idNota);
+                conn.commit(); // Para INSERT, UPDATE y DELETE
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.close();
+                }
+            }
+        }
+        return filas;
+    }
+    
+    public static int updateNote(Nota note) {
+        int filas = 0;
+        if (note != null) {    
+            SqlSession conn = null;
+            try {
+                conn = MyBatisUtils.getSession();
+                filas = conn.update("Nota.update", note);
+                conn.commit(); // Para INSERT, UPDATE y DELETE
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.close();
+                }
+            }
+        }
+        return filas;
+    }
+    
+    public static int saveNote(Nota note) {
+        int filas = 0;
+        if (note != null) {    
+            SqlSession conn = null;
+            try {
+                conn = MyBatisUtils.getSession();
+                filas = conn.insert("Nota.save", note);
+                conn.commit(); // Para INSERT, UPDATE y DELETE
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    conn.close();
+                }
+            }
+        }
+        return filas;
+    }
+    
+    
 }

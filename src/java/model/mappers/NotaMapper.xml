@@ -9,4 +9,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT * FROM notas WHERE idUsuario = #{idUsuario}
     </select>
     
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM notas WHERE idNota = #{idNota}
+    </delete>
+    
+    <update id="update" parameterType="beans.Nota">
+        UPDATE notas SET 
+            titulo = #{titulo},
+            contenido = #{contenido}
+        WHERE idNota = #{idNota}
+        
+    </update>
+    
+    <insert id="save" parameterType="beans.Nota">
+        INSERT INTO notas VALUES (null, #{idUsuario}, #{titulo}, #{contenido}, NOW())
+    </insert>
+    
 </mapper>

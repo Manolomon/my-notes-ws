@@ -33,21 +33,25 @@ public class UsuariosWS {
         Respuesta res = new Respuesta();
         res.setError(false);
         res.setErrorcode(0);
-        if (usuario.getNombre()==null || usuario.getNombre().trim().isEmpty()) {
+        if (usuario.getNombre() == null || usuario.getNombre().isEmpty()) {
             res.setError(true);
             res.setErrorcode(1);
             res.setMensaje("El nombre no puede estar vacío");
         }
-        if (usuario.getTelefono()==null || usuario.getTelefono().trim().isEmpty()) {
+        if (usuario.getTelefono() == null || usuario.getTelefono().isEmpty()) {
             res.setError(true);
             res.setErrorcode(2);
             res.setMensaje("El telefono no puede estar vacío");
         }
-        String telefonoValidacion = "^\\d{10}$";
-        if (!usuario.getTelefono().matches(telefonoValidacion)) {
+        if (!usuario.getTelefono().matches("^\\d{10}$")) {
             res.setError(true);
             res.setErrorcode(3);
             res.setMensaje("El valor del telefono debe contener 10 digitos");
+        }
+        if (usuario.getPassword() == null || usuario.getPassword().isEmpty()) {
+            res.setError(true);
+            res.setErrorcode(4);
+            res.setMensaje("La contraseña no puede estar vacía");
         }
         return res;
     }
@@ -60,16 +64,19 @@ public class UsuariosWS {
      * 1 - Nombre vacio
      * 2 - Telefono vacio
      * 3 - Telefono no son 10 digitos
-     * 4 - Fallo en envio de SMS
+     * 4 - Contraseña vacía
+     * 5 - Fallo en envio de SMS
      */
     public Respuesta registrarUsuario(
             @FormParam("nombre") String nombre,
-            @FormParam("telefono") String telefono
+            @FormParam("telefono") String telefono,
+            @FormParam("password") String password
     ){
         Respuesta res = new Respuesta();
         Usuario user = new Usuario();
         user.setNombre(nombre);
         user.setTelefono(telefono);
+        user.setPassword(password);
         res = validarRegistro(user);
         if (res.getErrorcode() == 0) {
             user.setIdEstatus(1);
