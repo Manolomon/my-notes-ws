@@ -1,10 +1,10 @@
 package beans;
 
-public class RespuestaUsuarioMensaje {
+public class RespuestaUsuario {
     private Usuario usuario;
     private Respuesta respuesta;
 
-    public RespuestaUsuarioMensaje() {
+    public RespuestaUsuario() {
     }
 
     public Usuario getUsuario() {

@@ -1,7 +1,7 @@
 package ws;
 
 import beans.Respuesta;
-import beans.RespuestaUsuarioMensaje;
+import beans.RespuestaUsuario;
 import beans.Usuario;
 import gateway.sms.JaxSms;
 import java.util.Random;
@@ -101,21 +101,35 @@ public class UsuariosWS {
     @POST
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta login() {
+    public RespuestaUsuario login(
+        @FormParam("telefono") String telefono,
+        @FormParam("password") String password
+    ) {
+        RespuestaUsuario respuestaFinal = new RespuestaUsuario();
         Respuesta res = new Respuesta();
-        
-        
-        return res;
-    }
-    
-    @GET
-    @Path("getusuarioporid")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Usuario getUsuarioPorId() {
-        Usuario user = new Usuario();
-        
-        
-        return user;
+        Usuario usuario = new Usuario();
+        usuario.setTelefono(telefono);
+        usuario.setPassword(password);
+        if (telefono == null || telefono.trim().isEmpty()) {
+            res.setError(true);
+            res.setErrorcode(2);
+            res.setMensaje("El telefono no puede estar vacío");
+            
+            respuestaFinal.setRespuesta(res);
+            respuestaFinal.setUsuario(null);
+        }
+        if (password == null || password.trim().isEmpty()) {
+            res.setError(true);
+            res.setErrorcode(4);
+            res.setMensaje("La contraseña no puede estar vacía");
+            
+            respuestaFinal.setRespuesta(res);
+            respuestaFinal.setUsuario(null);
+        }
+        if(!res.isError()) {
+            respuestaFinal = UsuarioDAO.login(usuario);
+        }
+        return respuestaFinal;
     }
     
     @POST
@@ -128,23 +142,25 @@ public class UsuariosWS {
      * 5 - Token vacia
      * 6 - Token no coincide con telefono
      */
-    public RespuestaUsuarioMensaje validarUsuario(
+    public RespuestaUsuario validarUsuario(
             @FormParam("telefono") String telefono,
             @FormParam("token") String token
     ){
-        RespuestaUsuarioMensaje respuestaFinal = new RespuestaUsuarioMensaje();
+        RespuestaUsuario respuestaFinal = new RespuestaUsuario();
         Respuesta res = new Respuesta();
         Usuario usuario = new Usuario();
         usuario.setTelefono(telefono);
-        usuario.setNombre("temp");
-        res = validarRegistro(usuario);
+        usuario.setTokenAcceso(token);
         if (token == null || token.trim().isEmpty()) {
             res.setError(true);
-            res.setErrorcode(5);
-            res.setMensaje("La token de validación no puede estar vacia");
+            res.setErrorcode(7);
+            
+            res.setMensaje("El token de validación no puede estar vacío");
+            respuestaFinal.setRespuesta(res);
+            respuestaFinal.setUsuario(null);
         }
         if(!res.isError()) {
-            respuestaFinal = UsuarioDAO.validarRegistro(telefono,token);
+            respuestaFinal = UsuarioDAO.validarRegistro(usuario);
         }
         return respuestaFinal;
     }

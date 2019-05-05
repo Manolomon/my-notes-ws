@@ -15,14 +15,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         VALUES (#{nombre},#{telefono}, NOW() ,#{tokenAcceso}, "0", #{password});
     </insert>
     
-    <select id="validarRegistro" parameterType="map" resultType="beans.Usuario">
-        SELECT TOP 1 FROM blocnotas.dbo.usuario WHERE telefono = #{telefono} AND tokenAcceso = #{token};
+    <select id="validarRegistro" parameterType="beans.Usuario" resultType="beans.Usuario">
+        SELECT * FROM usuario WHERE telefono = #{telefono} AND tokenAcceso = #{tokenAcceso} LIMIT 1;
     </select>
     
-    <update id="actualizarEstatus" parameterType="int">
-        UPDATE blocnotas.dbo.usuario SET
-        idEstatus = 1, tiempoValidacion = GETDATE()
-        WHERE idUsuario = #{id};
+    <select id="login" parameterType="beans.Usuario" resultType="beans.Usuario">
+        SELECT * FROM usuario WHERE telefono = #{telefono} AND password = #{password} LIMIT 1;
+    </select>
+    
+    <update id="actualizarEstatus" parameterType="Integer">
+        UPDATE usuario SET
+            idEstatus = "1", 
+            tiempoValidacion = NOW()
+        WHERE idUsuario = #{idUsuario}
     </update>
+    
+    
     
 </mapper>
