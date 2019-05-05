@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Usuario">
+    
+    <select id="buscarNumero" resultType="int" parameterType="string">
+        SELECT TOP 1 COUNT(idUsuario) FROM blocnotas.dbo.usuario WHERE telefono = #{telefono};
+    </select>
+    
+    <insert id="registrar" parameterType="beans.Usuario">
+        INSERT INTO blocnotas.dbo.usuario
+        (nombre,telefono,tiempoRegistro,tokenAcceso,idEstatus)
+        VALUES (#{nombre},#{telefono},GETDATE() ,#{tokenAcceso},0);
+    </insert>
+    
+    <select id="validarRegistro" parameterType="map" resultType="beans.Usuario">
+        SELECT TOP 1 FROM blocnotas.dbo.usuario WHERE telefono = #{telefono} AND tokenAcceso = #{token};
+    </select>
+    
+    <update id="actualizarEstatus" parameterType="int">
+        UPDATE blocnotas.dbo.usuario SET
+        idEstatus = 1, tiempoValidacion = GETDATE()
+        WHERE idUsuario = #{id};
+    </update>
+    
+</mapper>

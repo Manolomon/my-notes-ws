@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED" >
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/notas"/>
+        <property name="username" value="notas"/>
+        <property name="password" value="P@55word"/>
+        <property name="poolMaximumActiveConnections" value="50"/>
+      </dataSource>
+    </environment>
+  </environments>
+    
+    <mappers>
+        <mapper resource="model/mappers/UsuarioMapper.xml"/>
+        <mapper resource="model/mappers/NotaMapper.xml"/>
+    </mappers>
+</configuration>
